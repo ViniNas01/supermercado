@@ -93,6 +93,11 @@ async function excluirPedido() {
     const item = document.getElementById('itemExcluir').value;
     const mensagem = document.getElementById('mensagemExcluir');
 
+    if(item === '') {
+        mensagem.textContent = 'Digite um nome para excluir.';
+        return;
+    }
+
     const response = await fetch(`http://localhost:8080/pedido/${item}`, {
         method: 'DELETE'
     });

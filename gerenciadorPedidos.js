@@ -1,4 +1,3 @@
-
 async function adicionarPedido() {
     const item = document.getElementById('item').value.trim();
     const quantidade = parseInt(document.getElementById('quantidade').value);
@@ -31,7 +30,6 @@ async function adicionarPedido() {
         console.error(error);
     }
 }
-
 async function consultarPedido() {
     const inputBusca = document.getElementById('buscaItem');
     const nomeItem = inputBusca.value.trim(); // remover espaços em branco
@@ -61,7 +59,6 @@ async function consultarPedido() {
         console.error(error);
     }
 }
-
 async function alterarPedido() {
     const item = document.getElementById('itemAtualizar').value;
     const quantidade = parseInt(document.getElementById('quantidadeAtualizar').value);
@@ -87,8 +84,6 @@ async function alterarPedido() {
 
 
 };
-
-
 async function excluirPedido() {
     const item = document.getElementById('itemExcluir').value;
     const mensagem = document.getElementById('mensagemExcluir');
@@ -109,34 +104,87 @@ async function excluirPedido() {
         document.getElementById('itemExcluir').value = '';
     }
 };
+// async function listarPedidos() {
+//     const lista = document.getElementById('listaPedidos');
+//     lista.innerHTML = ''; // limpa antes de exibir
 
-async function listarPedidos() {
+//     try {
+//         const response = await fetch('http://localhost:8080/pedido');
+
+//         if (response.ok) {
+//             const pedidos = await response.json();
+
+//             if (pedidos.length === 0) {
+//                 lista.textContent = 'Nenhum pedido encontrado.';
+//                 return;
+//             }
+
+//             pedidos.forEach(pedido => {
+//                 const item = document.createElement('p');
+//                 item.innerHTML = `<strong>Item:</strong> ${pedido.item} | <strong>Quantidade:</strong> ${pedido.quantidade}`;
+//                 lista.appendChild(item);
+//             });
+//         } else {
+//             lista.textContent = 'Erro ao buscar os pedidos.';
+//         }
+//     } catch (error) {
+//         lista.textContent = 'Erro de conexão com o servidor.';
+//         console.error(error);
+//     }
+// }
+
+function listarPedidosComIntervalo() {
     const lista = document.getElementById('listaPedidos');
     lista.innerHTML = ''; // limpa antes de exibir
 
-    try {
-        const response = await fetch('http://localhost:8080/pedido');
+    async function fetchAndDisplayPedidos() {
+        try {
+            const response = await fetch('http://localhost:8080/pedido'); // CONFIRA se é /pedido ou /pedidos
 
-        if (response.ok) {
-            const pedidos = await response.json();
-
-            if (pedidos.length === 0) {
-                lista.textContent = 'Nenhum pedido encontrado.';
+            if (!response.ok) {
+                lista.innerHTML = '<p>Erro ao buscar os pedidos.</p>';
                 return;
             }
 
-            pedidos.forEach(pedido => {
+            const pedidos = await response.json();
+            lista.innerHTML = ''; // limpa para evitar duplicatas
+
+            if (!Array.isArray(pedidos) || pedidos.length === 0) {
+                lista.innerHTML = '<p>Nenhum pedido encontrado.</p>';
+                return;
+            }
+
+            let index = 0;
+
+            function exibirItem() {
+                if (index >= pedidos.length) {
+                    index = 0; // reinicia se quiser loop contínuo
+                    return;
+                }
+
+                const pedido = pedidos[index];
                 const item = document.createElement('p');
                 item.innerHTML = `<strong>Item:</strong> ${pedido.item} | <strong>Quantidade:</strong> ${pedido.quantidade}`;
                 lista.appendChild(item);
-            });
-        } else {
-            lista.textContent = 'Erro ao buscar os pedidos.';
+                index++;
+            }
+
+            exibirItem(); // mostra o primeiro imediatamente
+            const intervalId = setInterval(() => {
+                if (index >= pedidos.length) {
+                    clearInterval(intervalId);
+                    return;
+                }
+                exibirItem();
+            }, 15000); // 15 segundos
+
+        } catch (error) {
+            console.error(error);
+            lista.innerHTML = '<p>Erro de conexão com o servidor.</p>';
         }
-    } catch (error) {
-        lista.textContent = 'Erro de conexão com o servidor.';
-        console.error(error);
     }
+
+    fetchAndDisplayPedidos();
 }
 
 

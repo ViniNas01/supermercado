@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterar Pedido</title>
+    <script src="../../gerenciadorPedidos.js" defer></script>
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+    <header>
+        <h1>Lista de Compras Supermercado</h1>
+    </header>
+
+    <section class="telaRotina">
+        <h1>Alterar Pedido</h1>
+        <div class="form">
+            <div class="item">
+                <input type="text" id="itemAtualizar" placeholder="Nome do item">
+            </div>
+            <div class="item">
+                <input type="number" id="quantidadeAtualizar" placeholder="Nova quantidade">
+            </div>
+            <button onclick="alterarPedido()">Alterar Pedido</button>
+            <p id="mensagemAtualizar"></p>
+        </div>
+        <button onclick="window.location.href='index.html'">Voltar</button>
+    </section>
+    
+</body>
+</html>

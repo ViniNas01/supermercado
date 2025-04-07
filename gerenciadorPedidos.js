@@ -62,70 +62,32 @@ async function consultarPedido() {
     }
 }
 
-// async function alterarPedido() {
-//     const item = document.getElementById('itemAtualizar').value;
-//     const quantidade = parseInt(document.getElementById('quantidadeAtualizar').value);
-//     const mensagem = document.getElementById('mensagemAtualizar');
-
-//     const response = await fetch(`http://localhost:8080/pedido/${item}`, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ quantidade: quantidade })
-//     });
-
-//     const data = await response.json();
-
-//     mensagem.textContent = data.mensagem;
-
-//     if (response.ok) {
-//         // limpa os campos
-//         document.getElementById('itemAtualizar').value = '';
-//         document.getElementById('quantidadeAtualizar').value = '';
-//     }
-
-
-// };
-
-
 async function alterarPedido() {
-    const item = document.getElementById('itemAtualizar').value.trim();
+    const item = document.getElementById('itemAtualizar').value;
     const quantidade = parseInt(document.getElementById('quantidadeAtualizar').value);
     const mensagem = document.getElementById('mensagemAtualizar');
 
-    if (!item || isNaN(quantidade)) {
-        mensagem.textContent = 'Preencha os campos corretamente.';
-        return;
+    const response = await fetch(`http://localhost:8080/pedido/${item}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantidade: quantidade })
+    });
+
+    const data = await response.json();
+
+    mensagem.textContent = data.mensagem;
+
+    if (response.ok) {
+        // limpa os campos
+        document.getElementById('itemAtualizar').value = '';
+        document.getElementById('quantidadeAtualizar').value = '';
     }
 
-    try {
-        const response = await fetch(`http://localhost:8080/pedido/${item}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ quantidade: quantidade })
-        });
 
-        let data = {};
-        try {
-            data = await response.json();
-        } catch (e) {
-            data.mensagem = 'Pedido atualizado com sucesso.';
-        }
+};
 
-        mensagem.textContent = data.mensagem;
-
-        if (response.ok) {
-            document.getElementById('itemAtualizar').value = '';
-            document.getElementById('quantidadeAtualizar').value = '';
-        }
-    } catch (error) {
-        mensagem.textContent = 'Erro ao conectar com o servidor.';
-        console.error(error);
-    }
-}
 
 async function excluirPedido() {
     const item = document.getElementById('itemExcluir').value;
